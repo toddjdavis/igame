@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
+import { withRouter } from 'react-router-dom'
 
 
 class Form extends Component {
@@ -18,6 +19,7 @@ class Form extends Component {
     componentDidMount(){
         console.log(this.props.match.params.id)
         axios.get(`/api/game/${this.props.match.params.id}`).then(res => {
+            console.log('hit')
             this.setState({
                 game_picture: res.data[0].game_picture,
                 title: res.data[0].title,
@@ -46,24 +48,24 @@ class Form extends Component {
     //this will check two conditions before letting someone post a new game first if you ate signed in adn second if you have entered a game fields
     addGame = () => {
         if(!this.props.user.user.loggedIn){
-        return(
-            alert('Please sign In')
+            return(
+                alert('Please sign In')
         )
-        }
+    }
         if(!this.state.title){
             return(
                 alert('Please enter a title')
-            )
-        }
-        if(!this.state.game_picture){
+                )
+            }
+            if(!this.state.game_picture){
             return(
                 alert('Please enter a Picture URL')
-            )
+                )
         }
         if(!this.state.description){
             return(
                 alert('Please enter a description')
-            )
+                )
         }
         const{game_picture, title, description} = this.state
         axios.post('/api/games/post', {title, description, game_picture}).then(res=>{
@@ -81,6 +83,7 @@ class Form extends Component {
         // console.log(this.props.user.user.loggedIn)
         const{game_picture, title, description, update} = this.state
         console.log(description)
+        console.log(this.props)
         return(
             <div>
                 {/* <img alt='title' src={game_picture}/> */}
@@ -89,9 +92,9 @@ class Form extends Component {
                 <textarea placeholder='Description' value={description} onChange={(e)=> this.descriptionInput(e.target.value)}/>
                 {!update ? (
                     <button onClick={this.addGame}>Post Game</button>
-                ):(
+                    ):(
                     <button onClick={this.updateGame}>Update Game</button>
-                )}
+                    )}
             </div>
         )
     }
@@ -100,4 +103,4 @@ class Form extends Component {
 function mapStateToProps(state){
     return{user: state}
 }
-export default connect(mapStateToProps)(Form)
+export default withRouter(connect(mapStateToProps)(Form))

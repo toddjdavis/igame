@@ -31,13 +31,22 @@ module.exports = {
     //when a use select a specific game this will fire showing just the one game
     getGame: async (req, res) => {
         const db = req.app.get('db')
-        // console.log(req.params)
         const {id} = req.params
-        let game = await db.game.get_game(+id)
+        console.log(id)
+        let game = await db.game.get_game(id)
         // console.log(game)
         res.status(200).send(game)  
     },
-    //post endpoints
+    //if a user is looking for just one game this will alow the user to search for that game
+    searchGame: async (req, res) => {
+        const db = req.app.get('db')
+        // console.log(req.body)
+        const {search} = req.body
+        let searched = await db.game.search_games(search)
+        // console.log(searched)
+        res.status(200).send(searched)
+    },
+    ////post endpoints
     //when a user is logged in they can post a game and and the front end will route them back to the main dashboard which will have a componentDidMount() and will fire the getAllGames request
     addGame: async (req, res) => {
         const db = req.app.get('db')
@@ -60,8 +69,11 @@ module.exports = {
     //this will add a game to the users liked games ist if they are logged in
     likeAGame: async (req, res) => {
         const db = req.app.get('db')
+        // console.log(req.session)
         const {user_id} = req.session.user
         const {game_id} = req.body
+        // console.log(game_id)
+        // console.log(user_id)
         let liked = await db.game.like_game(user_id, game_id)
         res.status(200).send(liked)
     },

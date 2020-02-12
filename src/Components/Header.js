@@ -11,7 +11,7 @@ const Header = props => {
     return(
         <div>
             
-            <Link to='/'>Dashboard</Link>
+            <Link to='/dashboard'>Dashboard</Link>
             <Link to='/add'>Add new game</Link>
             <Link to='/profile'>Profile</Link>
             {/* this is conditional rendering wither you are logged in, if you are it give you the option to log in, if you are not logged in it has the log in information */}

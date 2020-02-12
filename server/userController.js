@@ -35,10 +35,12 @@ module.exports = {
         res.sendStatus(200)
     },
     updateEmail: async (req, res) => {
-        const {email} = req.body
+        // console.log(req.body)
+        const {email, user_picture} = req.body
         const db = req. app.get('db')
-        const {user_id} = req.session.user
-        let newEmail = await db.user.update_email(email, user_id)
+        const {id} = req.params
+        let newEmail = await db.user.update_email(email, id , user_picture)
+        console.log(newEmail)
         res.status(200).send(newEmail)
     }
 }

@@ -35,6 +35,7 @@ app.get('/api/games/mine', gameController.getMyGames)
 app.post('/api/comment', gameController.addComment)
 app.post('/api/games/like', gameController.likeAGame)
 app.post('/api/games/rate', gameController.rateGame)
+app.post('/api/games/look', gameController.searchGame)
 //Form.js
 app.post('/api/games/post', gameController.addGame)
 ////put
@@ -51,4 +52,4 @@ app.delete('/api/game/unlike/:id', gameController.unlike)
 app.post('/auth/register', userController.register)
 app.post('/auth/login', userController.login)
 app.get('/auth/logout', userController.logout)
-app.put('/auth/email', userController.updateEmail)
+app.put('/auth/email/:id', userController.updateEmail)

@@ -14,16 +14,23 @@ class Dashboard extends Component {
             title: '',
             description: '',
             commentText: '',
+            search: '',
+            email: '',
+            userRating: null,
+            liked: false,
             game_id: null,
-            user_id: null,
-            liked: false
+            user_id: null
         }
     }
     componentDidMount(){
         axios.get('/api/games').then(res => {
             this.setState({games: res.data})
         }).catch(err=>console.log(err))
+        if(this.props.match.params.id){
+            this.select(this.props.match.params.id)
+        }
     }
+
     //this function will use three endpoints to set the state for comments, rating and selected game values when a user selects a game they would like to view
     select = (value) => {
         this.setState({game_id:value})
@@ -33,7 +40,9 @@ class Dashboard extends Component {
                 game_picture: res.data[0].game_picture,
                 title: res.data[0].title,
                 description: res.data[0].description,
-                user_id: res.data[0].user_id
+                user_id: res.data[0].user_id,
+                email: res.data[0].email,
+                userRating: null
             })
             axios.get(`/api/games/comment/${value}`).then(res1=> {
                 // console.log(res1.data)
@@ -46,6 +55,13 @@ class Dashboard extends Component {
     }
     handleComment = (value) => {
         this.setState({commentText: value})
+    }
+    handleRating = (value) => {
+        // console.log(value)
+        this.setState({userRating: value})
+    }
+    handleSearch = (value) => {
+        this.setState({search: value})
     }
     //this will check and see if a use is logged in and has enter text in there comment and then post and return the entire comment array for the selected game
     addComment = () => {
@@ -65,6 +81,7 @@ class Dashboard extends Component {
             this.setState({comments: res.data})
         }).catch(err=>console.log(err))
     }
+    //this will check if a user has logged in and if they have it will add the game to there liked game array
     likeGame = () => {
         if(!this.props.user.user.loggedIn){
             return(
@@ -78,7 +95,8 @@ class Dashboard extends Component {
         
         }
         //this will use the reducer state to see if you are logged in user who posted the game and if you are then it will let edit the game by sending you back to Form.js
-        updateGame=(game_id)=> {
+        updateGame=()=> {
+            const {game_id} = this.state
             if(this.state.user_id === this.props.user.user.user.user_id){
                 this.props.history.push(`/add/${game_id}`)
             }else{
@@ -96,14 +114,41 @@ class Dashboard extends Component {
                 return(alert('only the creator of a game can delete it'))
             }
         }
+        //this allows users to rate and game and will return the new avg of how the game has been rated
+        rateAGame = () => {
+            if(!this.props.user.user.loggedIn){
+                return(
+                    alert('Please Login to rate this game')
+                )
+            }
+            const {game_id, userRating} = this.state
+            if(!userRating){
+                return(
+                    alert('please select a rating')
+                )
+            }
+            let rating = userRating
+            // console.log(rating)
+            axios.post('/api/games/rate', {game_id, rating}).then(res=> {
+                this.setState({rating:res.data})
+            }).catch(err=>console.log(err))
+        }
+        //this function will allow you to search through game and update state to the new games that match the passed in params
+        searching =()=> {
+            const{search}=this.state
+            axios.post('/api/games/look', {search}).then(res=>{this.setState({games:res.data})})
+            .catch(err=> console.log(err))
+        }
     render(){
-        // console.log(this.props.user)
-        // console.log(this.state.games)
-        // console.log(this.state.game_picture)
+        const {game_picture, user_id, title, description, games, game_id, comments, userRating, rating, email} = this.state
         // console.log(this.state.commentText)
-        const {game_picture, title, description, games, game_id, comments} = this.state
+        // console.log(this.props.user)
+        // console.log(games)
+        // console.log(game_picture)
         // console.log(liked)
+        // console.log(userRating)
         // console.log(comments)
+        
         let mappedGames = games.map((el)=> {
             return(
                 <div className='smallGame' onClick={()=> this.select(el.game_id)}>
@@ -120,10 +165,20 @@ class Dashboard extends Component {
                 </div>
             )
         })
+        let mappedRating = rating.map((el)=> {
+            // console.log(el)
+            return(
+                <div>
+                    
+                    <h1>Rating: {Math.round(el.avg *100)/100} /5</h1>
+                </div>
+            )
+        })
         return(
             <div className='dashboard'>
                 <div className='gameHolder'>
-                    All Games
+                    <input placeholder='looking for a new game?' onChange={(e) => this.handleSearch(e.target.value)} />
+                    <button onClick={this.searching}>Search</button>
                     {mappedGames}
                 </div>
                 {/* this will either ask you to select a game to view or show you the game you have selected and display the relevant data */}
@@ -135,16 +190,28 @@ class Dashboard extends Component {
                     <h1>{title}</h1>
                     <span id='textBody'>{description}</span>
                     <div className='bar'>
-                        <h2>Rating(wip)</h2>
-                        
+                        <h3>{mappedRating}</h3>
+                        <select value={userRating} onChange={(e)=> this.handleRating(e.target.value)}>
+                            <option value={null}>select a rating</option>
+                            <option value={1}>1</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5</option>
+                        </select>
+                        <button onClick={this.rateAGame}>Rate Game</button>
                         <div className='together'>
                             <div>like this game?</div>
                             <input onChange={this.likeGame} type='checkbox'/>
                         </div>
+                        {user_id === this.props.user.user.user.user_id ? (
                         <div>
                             <button onClick={()=>this.updateGame(game_id)}>Update?</button>
                             <button onClick={()=>this.deleteGame(game_id)}>Delete?</button>
                         </div>
+                        ) : (
+                            <div>Posted by: {email}</div>
+                        )}
                     </div>
                     <div className='commentArea'>
                         <div className='addComment'>
