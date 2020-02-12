@@ -11,6 +11,7 @@ export default (
     <Switch>
         {/* these three can be accessed in the header */}
         <Route exact path='/' component={Dashboard} />
+        <Route path='/add/:id' component={Form} />
         <Route path='/add' component={Form} />
         <Route path='/profile' component={Profile} />
         {/* these three will only be displayed and can't be accessed in the header */}

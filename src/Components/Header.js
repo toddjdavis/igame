@@ -7,7 +7,7 @@ const Header = props => {
     //using hooks to hold state to conserve on storage space they pass there data to redux to login and register
     const [inputs, handleInputs] = useState({email: '', password: ''})
     // console.log(inputs.email, inputs.password)
-    console.log(props.user)
+    // console.log(props.user)
     return(
         <div>
             
@@ -25,7 +25,7 @@ const Header = props => {
             ):(
                 <div>
                 <h1>Hello {props.user.user.user.email}</h1>
-                <button>Logout</button>
+                <button onClick={()=>props.logout()}>Logout</button>
                 </div>
             )}
         </div>

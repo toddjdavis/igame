@@ -26,7 +26,7 @@ export const login = (email, password) => {
     }
 }
 export const logout = () => {
-    let data = axios.post('/auth/logout').then(res=>res.data)
+    let data = axios.get('/auth/logout').then(res=>res.data)
     return{
         type:LOGOUT,
         payload: data

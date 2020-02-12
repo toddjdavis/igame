@@ -21,23 +21,31 @@ massive(CONNECTION_STRING).then(db => {
     app.listen(SERVER_PORT, ()=> console.log(`server is listening on port: ${SERVER_PORT}`))
 })
 
-////game endpoints 
-//get
+//////game endpoints 
+////get
+//Dashboard.js
 app.get('/api/games', gameController.getAllGames)
-app.get('/api/games/mine', gameController.getMyGames)
-app.post('/api/games/info', gameController.getRatingAndComments)
+app.get('/api/games/comment/:id', gameController.getComments)
+app.get('/api/games/rating/:id', gameController.getRating)
 app.get('/api/game/:id', gameController.getGame)
-//post
-app.post('/api/games/post', gameController.addGame)
+//Profile.js
+app.get('/api/games/mine', gameController.getMyGames)
+////post
+//Dashboard.js
 app.post('/api/comment', gameController.addComment)
 app.post('/api/games/like', gameController.likeAGame)
 app.post('/api/games/rate', gameController.rateGame)
-//put
-app.put('/api/game/update/:id', gameController.updateGame)
+//Form.js
+app.post('/api/games/post', gameController.addGame)
+////put
+//Dashboard.js
 app.put('/api/comment/update/:id', gameController.updateComment)
-//delete
+//Form.js
+app.put('/api/game/update/:id', gameController.updateGame)
+////delete
 app.delete('/api/game/delete/:id', gameController.deleteGame)
 app.delete('/api/comment/delete/:id', gameController.deleteComment)
+app.delete('/api/game/unlike/:id', gameController.unlike)
 
 ////user endpoints
 app.post('/auth/register', userController.register)

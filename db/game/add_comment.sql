@@ -7,4 +7,4 @@ insert into comments(
 );
 select * from comments 
 where game_id = $2
-order by commnet_id desc;
+order by comment_id desc;

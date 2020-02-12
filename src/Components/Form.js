@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
+import {connect} from 'react-redux'
+
 
 class Form extends Component {
     constructor(){
@@ -14,12 +16,13 @@ class Form extends Component {
     }
     //if you entered this page from editing it will set the values on state equal to there current values until they are update and then it will kick you back to the dashboard
     componentDidMount(){
+        console.log(this.props.match.params.id)
         axios.get(`/api/game/${this.props.match.params.id}`).then(res => {
             this.setState({
-                game_picture: res.data.game_picture,
-                title: res.data.title,
-                description: res.data.description,
-                game_id: res.data.game_id,
+                game_picture: res.data[0].game_picture,
+                title: res.data[0].title,
+                description: res.data[0].description,
+                game_id: res.data[0].game_id,
                 update: true
             })
         })
@@ -40,7 +43,28 @@ class Form extends Component {
             description: value
         })
     }
+    //this will check two conditions before letting someone post a new game first if you ate signed in adn second if you have entered a game fields
     addGame = () => {
+        if(!this.props.user.user.loggedIn){
+        return(
+            alert('Please sign In')
+        )
+        }
+        if(!this.state.title){
+            return(
+                alert('Please enter a title')
+            )
+        }
+        if(!this.state.game_picture){
+            return(
+                alert('Please enter a Picture URL')
+            )
+        }
+        if(!this.state.description){
+            return(
+                alert('Please enter a description')
+            )
+        }
         const{game_picture, title, description} = this.state
         axios.post('/api/games/post', {title, description, game_picture}).then(res=>{
             this.props.history.push('/')
@@ -48,16 +72,18 @@ class Form extends Component {
     }
     updateGame = () => {
         const{game_picture, title, description, game_id} = this.state
-        axios.put(`/api/games/update/${game_id}`, {title, description, game_picture})
+        axios.put(`/api/game/update/${game_id}`, {title, description, game_picture})
         .then(res=>{
             this.props.history.push('/')
         }).catch(err=>console.log(err))
     }
     render(){
+        // console.log(this.props.user.user.loggedIn)
         const{game_picture, title, description, update} = this.state
+        console.log(description)
         return(
             <div>
-                <img src={game_picture}/>
+                {/* <img alt='title' src={game_picture}/> */}
                 <input placeholder='Picture URL' value={game_picture} onChange={(e)=> this.pictureInput(e.target.value)}/>
                 <input placeholder='Title' value={title} onChange={(e)=> this.titleInput(e.target.value)}/>
                 <textarea placeholder='Description' value={description} onChange={(e)=> this.descriptionInput(e.target.value)}/>
@@ -71,4 +97,7 @@ class Form extends Component {
     }
 }
 
-export default Form
+function mapStateToProps(state){
+    return{user: state}
+}
+export default connect(mapStateToProps)(Form)

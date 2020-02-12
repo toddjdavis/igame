@@ -11,7 +11,7 @@ module.exports = {
         let salt = bcrypt.genSaltSync(10)
         let hash = bcrypt.hashSync(password, salt)
         let newUser = await db.user.register(email, hash, user_picture)
-        req.session.user = {id: newUser[0].user_id, email: newUser[0].email, user_picture: newUser[0].user_picture}
+        req.session.user = {user_id: newUser[0].user_id, email: newUser[0].email, user_picture: newUser[0].user_picture}
         res.status(201).send(req.session.user)
     },
     login: async (req, res) => {
@@ -25,7 +25,7 @@ module.exports = {
         if(!authenticated){
             res.status(401).send('password incorrect')
         }
-        req.session.user = {id: user[0].user_id, email: user[0].email,
+        req.session.user = {user_id: user[0].user_id, email: user[0].email,
         user_picture: user[0].user_picture}
         res.status(202).send(req.session.user)
     },
