@@ -1,4 +1,7 @@
+require('dotenv').config()
 const bcrypt = require('bcryptjs')
+const nodemailer = require('nodemailer')
+const {EMAIL, PASSWORD} = process.env
 module.exports = {
     register: async (req, res) =>{
         console.log(req.body)
@@ -42,5 +45,49 @@ module.exports = {
         let newEmail = await db.user.update_email(email, id , user_picture)
         console.log(newEmail)
         res.status(200).send(newEmail)
+    },
+    email: async (req, res) => {
+        const {email} = req.body
+        let message = 'Thank you for registering your account'
+        let image = 'https://i.etsystatic.com/17857814/r/il/5e775c/1612229339/il_570xN.1612229339_bj2s.jpg'
+        try {
+            // console.log(EMAIL)
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: EMAIL,
+                    pass: PASSWORD
+                }
+            })
+            let info = await transporter.sendMail({
+                from: EMAIL,
+                to: `<${email}>`,
+                subject: 'Register',
+                text: message,
+                html: `<div>${message}</div>
+                       <img src="cid:unique@nodemailer.com"/>`,
+
+                attachments: [
+                    { 
+                      filename: 'license.txt',
+                      path: 'https://raw.github.com/nodemailer/nodemailer/master/LICENSE'
+                    },
+                    { 
+                      cid: 'unique@nodemailer.com', 
+                      path: image
+                    }
+                  ]
+            }, (err, res) => {
+                if (err) {
+                    console.log('err', err)
+                } else {
+                    console.log('res', res)
+                    res.status(200).send(info)
+                }
+            })
+        } catch(err){
+            console.log(err)
+            res.sendStatus(500)
+        }
     }
 }

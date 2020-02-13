@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
+import '../App.css'
 import {Link} from 'react-router-dom'
-import {register, login, logout} from '../ducks/userReducer'
+import {register, login, logout, email} from '../ducks/userReducer'
 import {connect} from 'react-redux'
 
 const Header = props => {
@@ -9,24 +10,26 @@ const Header = props => {
     // console.log(inputs.email, inputs.password)
     // console.log(props.user)
     return(
-        <div>
-            
-            <Link to='/dashboard'>Dashboard</Link>
-            <Link to='/add'>Add new game</Link>
-            <Link to='/profile'>Profile</Link>
+        <div className='head'>
+            <div className='tabs'>
+                <h1>I-Game</h1> 
+                <Link to='/dashboard'>Dashboard</Link>
+                <Link to='/add'>Add new game</Link>
+                <Link to='/profile'>Profile</Link>
+            </div>
             {/* this is conditional rendering wither you are logged in, if you are it give you the option to log in, if you are not logged in it has the log in information */}
             {!props.user.user.loggedIn ? (
-            <div>
-            <input placeholder='Email' onChange={(e) => handleInputs({...inputs, email: e.target.value})}/>
-            <input placeholder='Password' type='password' onChange={(e) => handleInputs({...inputs, password: e.target.value})}/>
-            <button onClick={()=>props.login(inputs.email, inputs.password)}>Login</button>
-            <button onClick={()=>props.register(inputs.email, inputs.password)} >Register</button>
+            <div className='login'>
+                <input placeholder='Email' onChange={(e) => handleInputs({...inputs, email: e.target.value})}/>
+                <input placeholder='Password' type='password' onChange={(e) => handleInputs({...inputs, password: e.target.value})}/>
+                <button onClick={()=>props.login(inputs.email, inputs.password)}>Login</button>
+                <button onClick={()=>props.register(inputs.email, inputs.password).then(()=> {props.email(inputs.email)})} >Register</button>
             </div>
             ):(
-                <div>
+            <div className='login'>
                 <h1>Hello {props.user.user.user.email}</h1>
                 <button onClick={()=>props.logout()}>Logout</button>
-                </div>
+            </div>
             )}
         </div>
     )
@@ -34,4 +37,4 @@ const Header = props => {
 function mapStateToProps(state){
     return{user: state}
 }
-export default connect(mapStateToProps, {register, login, logout})(Header)
+export default connect(mapStateToProps, {register, login, logout, email})(Header)

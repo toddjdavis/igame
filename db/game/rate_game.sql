@@ -7,5 +7,5 @@ insert into rating(
     $2,
     $3
 );
-select * from rating
+select avg(rating) from rating
 where game_id = $2;

@@ -8,6 +8,7 @@ const initialState = {
 const REGISTER ='REGISTER'
 const LOGIN = 'LOGIN'
 const LOGOUT = 'LOGOUT'
+const EMAIL = 'EMAIL'
 
 
 //using redux here so i can keep header a functional component
@@ -32,6 +33,13 @@ export const logout = () => {
         payload: data
     }
 }
+export const email = (email) => {
+    let data = axios.post('/auth/email', {email}).then(res => res.data)
+    return {
+        type: EMAIL,
+        payload: data
+    }
+}
 
 
 export default function reducer(state = initialState, action){
@@ -42,6 +50,8 @@ export default function reducer(state = initialState, action){
             return{...state, user: action.payload, loggedIn: true}
         case LOGOUT + '_FULFILLED':
             return{...state, user: action.payload, loggedIn: false}
+        case EMAIL + '_FULFILLED':
+            return{...state, loggedIn: true}
         default:
             return state
     }

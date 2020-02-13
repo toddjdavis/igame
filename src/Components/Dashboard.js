@@ -159,33 +159,36 @@ class Dashboard extends Component {
         })
         let mappedComments = comments.map((el)=> {
             return(
-                <div className='displayComments'>
-                    <span>{el.email}</span>
+                <div className='comment'>
                     <span>{el.comment}</span>
+                    <span>{el.email}</span>
                 </div>
             )
         })
         let mappedRating = rating.map((el)=> {
             // console.log(el)
+            let rate = +el.avg
+            // console.log(rate)
             return(
                 <div>
-                    
-                    <h1>Rating: {Math.round(el.avg *100)/100} /5</h1>
+                    <h1>Rating: {Math.round(rate *100)/100} /5</h1>
                 </div>
             )
         })
         return(
-            <div className='dashboard'>
-                <div className='gameHolder'>
-                    <input placeholder='looking for a new game?' onChange={(e) => this.handleSearch(e.target.value)} />
-                    <button onClick={this.searching}>Search</button>
+            <div className='dashboard' >
+                <div className='gameHolder' id='style-2'>
+                    <div className='game'>
+                        <input placeholder='looking for a new game?' onChange={(e) => this.handleSearch(e.target.value)} />
+                        <button onClick={this.searching}>Search</button>
+                    </div>
                     {mappedGames}
                 </div>
                 {/* this will either ask you to select a game to view or show you the game you have selected and display the relevant data */}
                 {!game_id ?(
-                    <h1>Please Select a game to view</h1>
+                        <h1 >Please Select a game to view</h1>
                 ):(
-                <div className='singleGame'>
+                <div className='singleGame' >
                     <img className='largePicture' src={game_picture} alt={title} />
                     <h1>{title}</h1>
                     <span id='textBody'>{description}</span>
@@ -218,7 +221,7 @@ class Dashboard extends Component {
                             <textarea placeholder='Write your comment here' onChange={(e) => this.handleComment(e.target.value)}/>
                             <button onClick={this.addComment}>Comment</button>
                         </div>
-                        <div>
+                        <div  className='displayComments' id='style-2'>
                             {mappedComments}
                         </div>
                     </div>

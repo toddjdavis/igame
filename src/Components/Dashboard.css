@@ -8,31 +8,44 @@
 }
 .gameHolder{
     height: 85vh;
-    width: 43vw;
+    width: 40vw;
     overflow: hidden;
     overflow-y: scroll;
+    background-color: rgba(42, 136, 212, 0.219);
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    
 }
 .smallGame{
-    width: 40vw;
-    height: 200px;
+    width: 30vw;
+    height: 100px;
     display: flex;
     justify-content: start;
     align-items: center;
+    background-color: rgb(143, 177, 197);
+    padding-left: 25px;
+    border-radius: 10px;
+    position: relative;
+    top: 50px;
+    box-shadow: 4px 4px 4px black;
+    
 }
 .smallPicture{
-    height: 150px;
-    width: 150px;
+    height: 75px;
+    width: 75px;
 }
 .singleGame{
     height: 85vh;
-    width: 45vw;
+    width: 50vw;
     display: flex;
     justify-content: space-around;
     flex-direction: column;
     align-items: center;
-    overflow: hidden;
-    overflow-y: scroll;
-    background-color: rgb(212, 224, 235);
+    background-color: rgba(42, 136, 212, 0.219);
+    border-radius: 10px;
 }
 .largePicture{
     height: 25vh;
@@ -50,10 +63,43 @@
     justify-content: center;
     align-items: center;
 }
+.game{
+    position: relative;
+    top: 25px;
+}
+.displayComments{
+    height: 20vh;
+    width: 50vw;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    overflow: hidden;
+    overflow-y: scroll;
+}
 #textBody{
     height: 20vh;
     width: 35vw;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
+}
+#style-2::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+    background-color: #F5F5F5;
+    height: 80%;
+}
+
+#style-2::-webkit-scrollbar
+{
+	width: 12px;
+	background-color: #F5F5F5;
+}
+
+#style-2::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #D62929;
 }
