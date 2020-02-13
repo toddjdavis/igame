@@ -49,6 +49,9 @@ class Profile extends Component {
     edit = () => {
         this.setState({editing:true})
     }
+    select = (game_id) => {
+        this.props.history.push(`/dashboard/${game_id}`)
+    }
     render(){
         // console.log(this.props.user.user.loggedIn)
         console.log(this.state)

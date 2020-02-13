@@ -77,13 +77,14 @@ module.exports = {
         let liked = await db.game.like_game(user_id, game_id)
         res.status(200).send(liked)
     },
-    // if a user is signed in they can like a game and it will a just the current rating on the game
+    // if a user is signed in they can like a game and it will adjust the current rating on the game
     rateGame: async (req, res) => {
         const db = req.app.get('db')
         const {user_id} = req.session.user
+        console.log(req.body)
         const {game_id, rating} = req.body
         let rate = await db.game.rate_game(user_id, game_id, rating)
-        res.status(200).send(rate)
+        res.status(200).send(+rate)
     },
     //put -these endpoints will only be available for the poster of them endpoints
     //the user will be able to change the description, title and picture with this method, this will not return anything because you will be routed to a new page on the front end
