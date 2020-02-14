@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-
+import './Dashboard.css'
 class Profile extends Component {
     constructor(){
         super()
@@ -35,9 +35,9 @@ class Profile extends Component {
         this.setState({user_picture: value})
     }
     sendChanges = () => {
-        const {user_id} = this.state
+        const {user_id, email, user_picture} = this.state
         console.log(user_id)
-        axios.put(`/auth/email/${user_id}`).then(res => {
+        axios.put(`/auth/email/${user_id}`, {email, user_picture}).then(res => {
             console.log(res.data)
             this.setState({
                 email: res.data[0].email,
@@ -54,7 +54,7 @@ class Profile extends Component {
     }
     render(){
         // console.log(this.props.user.user.loggedIn)
-        console.log(this.state)
+        // console.log(this.state)
         const {games, email, user_picture, editing} = this.state
         let mappedGames = games.map((el)=> {
             return(
@@ -65,29 +65,28 @@ class Profile extends Component {
             )
         })
         return(
-            <div>
+            <div >
                 {!this.props.user.user.loggedIn ? (
                     <h1>Please Login</h1>
                 ): (
-                <div>
+                <div className='profile-page'>
                     <div className='profile'>
                         {editing ? (
                             <div>
-                                <input value={user_picture} onChange={(e)=> this.handlePicture(e.target.value)} />
-                                <input value={email} onChange={(e)=> this.handleEmail(e.target.value)} />
+                                <input placeholder='Profile Picture URL' value={user_picture} onChange={(e)=> this.handlePicture(e.target.value)} />
+                                <input placeholder='Email' value={email} onChange={(e)=> this.handleEmail(e.target.value)} />
                                 <button onClick={this.sendChanges}>Submit changes</button>
                             </div>
                         ) : (
                             <div>
-                                <img src={user_picture}/>
+                                <img className='profile-picture' src={user_picture}/>
                                 <h2>Hello: {email}</h2>
                                 <button onClick={this.edit}>Edit Profile</button>
                             </div>
                         )}
                     </div>
-                    <div className='gameHolder'>
+                    <div className='gameHolder' id='style-2'>
                         My games
-                        <button onClick={this.refresh}>Refresh</button>
                         {mappedGames}
                     </div>
                 </div>

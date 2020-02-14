@@ -32,7 +32,7 @@ module.exports = {
     getGame: async (req, res) => {
         const db = req.app.get('db')
         const {id} = req.params
-        console.log(id)
+        // console.log(id)
         let game = await db.game.get_game(id)
         // console.log(game)
         res.status(200).send(game)  

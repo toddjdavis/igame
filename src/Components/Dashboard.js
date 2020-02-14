@@ -158,10 +158,17 @@ class Dashboard extends Component {
             )
         })
         let mappedComments = comments.map((el)=> {
+            let pic = 'https://cdn2.iconfinder.com/data/icons/bubbles-phone-interface/100/avatar_blank_human_face_contact_user_app-512.png'
+            
             return(
                 <div className='comment'>
                     <span>{el.comment}</span>
-                    <span>{el.email}</span>
+                    <span>: Posted by {el.email} </span>
+                    {el.user_picture ? (
+                        <img className='comment-picture' src={el.user_picture} />
+                    ) : (
+                        <img className='comment-picture' src={pic} />
+                    )}
                 </div>
             )
         })
@@ -179,8 +186,8 @@ class Dashboard extends Component {
             <div className='dashboard' >
                 <div className='gameHolder' id='style-2'>
                     <div className='game'>
-                        <input placeholder='looking for a new game?' onChange={(e) => this.handleSearch(e.target.value)} />
-                        <button onClick={this.searching}>Search</button>
+                        <input className='search' placeholder='looking for a new game?' onChange={(e) => this.handleSearch(e.target.value)} />
+                        <button className='search-button' onClick={this.searching}>Search</button>
                     </div>
                     {mappedGames}
                 </div>
@@ -189,9 +196,21 @@ class Dashboard extends Component {
                         <h1 >Please Select a game to view</h1>
                 ):(
                 <div className='singleGame' >
-                    <img className='largePicture' src={game_picture} alt={title} />
-                    <h1>{title}</h1>
-                    <span id='textBody'>{description}</span>
+                    <div className='ads-space'>
+                        <div className='ads1'>
+                            <h2>Ads for {title}</h2>
+                        </div>
+                        <img className='largePicture' src={game_picture} alt={title} />
+                        <div className='ads2'>
+                            <h2>Ads for games similar to {title}</h2>
+                        </div>
+                    </div>
+                    <div className='title'>
+                        <h1>{title}</h1>
+                    </div>
+                    <div className='desc'>
+                        <span id='textBody'>{description}</span>
+                    </div>
                     <div className='bar'>
                         <h3>{mappedRating}</h3>
                         <select value={userRating} onChange={(e)=> this.handleRating(e.target.value)}>
@@ -219,9 +238,10 @@ class Dashboard extends Component {
                     <div className='commentArea'>
                         <div className='addComment'>
                             <textarea placeholder='Write your comment here' onChange={(e) => this.handleComment(e.target.value)}/>
-                            <button onClick={this.addComment}>Comment</button>
+                            <button className='search-button' onClick={this.addComment}>Add Comment</button>
                         </div>
                         <div  className='displayComments' id='style-2'>
+                            Comments:
                             {mappedComments}
                         </div>
                     </div>

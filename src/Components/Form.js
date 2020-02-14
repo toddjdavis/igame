@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import './Dashboard.css'
 
 
 class Form extends Component {
@@ -69,14 +70,14 @@ class Form extends Component {
         }
         const{game_picture, title, description} = this.state
         axios.post('/api/games/post', {title, description, game_picture}).then(res=>{
-            this.props.history.push('/')
+            this.props.history.push('/dashboard')
         }).catch(err=>console.log(err))
     }
     updateGame = () => {
         const{game_picture, title, description, game_id} = this.state
         axios.put(`/api/game/update/${game_id}`, {title, description, game_picture})
         .then(res=>{
-            this.props.history.push('/')
+            this.props.history.push('/dashboard')
         }).catch(err=>console.log(err))
     }
     render(){
@@ -85,16 +86,18 @@ class Form extends Component {
         console.log(description)
         console.log(this.props)
         return(
-            <div>
-                {/* <img alt='title' src={game_picture}/> */}
-                <input placeholder='Picture URL' value={game_picture} onChange={(e)=> this.pictureInput(e.target.value)}/>
-                <input placeholder='Title' value={title} onChange={(e)=> this.titleInput(e.target.value)}/>
-                <textarea placeholder='Description' value={description} onChange={(e)=> this.descriptionInput(e.target.value)}/>
-                {!update ? (
-                    <button onClick={this.addGame}>Post Game</button>
+            <div className='dashboard'>
+                <div className='singleGame'>
+                    <img className='profile-picture' src={game_picture}/>
+                    <input placeholder='Picture URL' value={game_picture} onChange={(e)=> this.pictureInput(e.target.value)}/>
+                    <input placeholder='Title' value={title} onChange={(e)=> this.titleInput(e.target.value)}/>
+                    <textarea placeholder='Description' value={description} onChange={(e)=> this.descriptionInput(e.target.value)}/>
+                    {!update ? (
+                        <button className='form-button' onClick={this.addGame}>Post Game</button>
                     ):(
-                    <button onClick={this.updateGame}>Update Game</button>
+                        <button className='form-button' onClick={this.updateGame}>Update Game</button>
                     )}
+                </div>
             </div>
         )
     }
