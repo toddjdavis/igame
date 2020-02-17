@@ -103,6 +103,14 @@ class Dashboard extends Component {
                 return(alert('only the creator of a game can edit it'))
             }
         }
+        viewProfile=(value)=> {
+            console.log(value)
+            if(this.props.user.user.loggedIn){
+                this.props.history.push(`/profile/${value}`)
+            }else{
+                return(alert('please login to view a users profile'))
+            }
+        }
         deleteGame = (game_id)=> {
             if(this.state.user_id === this.props.user.user.user.user_id){
                 axios.delete(`/api/game/delete/${game_id}`).then(res=> {
@@ -161,7 +169,7 @@ class Dashboard extends Component {
             let pic = 'https://cdn2.iconfinder.com/data/icons/bubbles-phone-interface/100/avatar_blank_human_face_contact_user_app-512.png'
             
             return(
-                <div className='comment'>
+                <div onClick={() => this.viewProfile(el.user_id)} className='comment'>
                     <span>{el.comment}</span>
                     <span>: Posted by {el.email} </span>
                     {el.user_picture ? (
@@ -232,7 +240,7 @@ class Dashboard extends Component {
                             <button onClick={()=>this.deleteGame(game_id)}>Delete?</button>
                         </div>
                         ) : (
-                            <div>Posted by: {email}</div>
+                            <div onClick={() => this.viewProfile(user_id)}>Posted by: {email}</div>
                         )}
                     </div>
                     <div className='commentArea'>

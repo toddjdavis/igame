@@ -5,6 +5,7 @@ insert into comments(
 ) values (
     $1, $2, $3
 );
-select * from comments 
-where game_id = $2
+select * from comments c
+join users u on c.user_id = u.user_id
+where c.game_id = $2
 order by comment_id desc;

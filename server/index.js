@@ -5,6 +5,7 @@ const massive = require('massive')
 const {SESSION_SECRET, CONNECTION_STRING, SERVER_PORT} = process.env
 const gameController = require('./gameController')
 const userController = require('./userController')
+const messageController = require('./messageController')
 const app = express()
 
 app.use(express.json())
@@ -18,7 +19,14 @@ app.use(session({
 massive(CONNECTION_STRING).then(db => {
     app.set('db', db)
     console.log('db is ready to game')
-    app.listen(SERVER_PORT, ()=> console.log(`server is listening on port: ${SERVER_PORT}`))
+    const io = require('socket.io')(
+        app.listen(SERVER_PORT, ()=> console.log(`server is listening on port: ${SERVER_PORT}`))
+    );
+    io.on('connection', socket => {
+        const db = app.get('db')
+        socket.on('message to server', body=> messageController.messageToServer(body, io, socket, db, session))
+        socket.on('join', body=> messageController.checkForChatroom(body, io, socket, db, session))
+    });
 })
 
 //////game endpoints 
@@ -54,3 +62,5 @@ app.post('/auth/login', userController.login)
 app.get('/auth/logout', userController.logout)
 app.put('/auth/email/:id', userController.updateEmail)
 app.post('/auth/email', userController.email)
+app.get(`/api/user/:id`, userController.getProfile)
+app.get('/api/chats', userController.getMyChats)

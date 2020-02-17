@@ -73,11 +73,12 @@ class Form extends Component {
             this.props.history.push('/dashboard')
         }).catch(err=>console.log(err))
     }
+    //after you update the game it will push you back to the dashboard and pull up the game you have updated
     updateGame = () => {
         const{game_picture, title, description, game_id} = this.state
         axios.put(`/api/game/update/${game_id}`, {title, description, game_picture})
         .then(res=>{
-            this.props.history.push('/dashboard')
+            this.props.history.push(`/dashboard/${game_id}`)
         }).catch(err=>console.log(err))
     }
     render(){

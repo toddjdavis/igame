@@ -89,5 +89,17 @@ module.exports = {
             console.log(err)
             res.sendStatus(500)
         }
+    },
+    async getProfile(req, res){
+        const db = req.app.get('db')
+        const {id} = req. params
+        let profileInfo = await db.user.get_profile(id)
+        res.status(200).send(profileInfo)
+    },
+    async getMyChats(req, res){
+        const db = req.app.get('db')
+        const {user_id} = req.session.user
+        let myChats = await db.messages.get_my_chats(user_id)
+        res.status(200).send(myChats)
     }
 }

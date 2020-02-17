@@ -10,12 +10,34 @@ class Profile extends Component {
             email: '',
             user_picture: '',
             user_id: null,
-            editing: false
+            editing: false,
+            notYou: false
         }
     }
+    //this will look and see if you enter by clicking profile or trying to view another users profile, if you however selected you own comment it will still let you edit your profile
     componentDidMount(){
-        this.refresh()
+        if(this.props.match.params.id){
+            axios.get(`/api/user/${this.props.match.params.id}`).then(res => {
+                // console.log(res.data)
+                this.setState({
+                    email: res.data[0].email,
+                    user_picture: res.data[0].user_picture,
+                    user_id: res.data[0].user_id,
+                    games: res.data,
+                    notYou: true
+                })
+                // console.log(this.state.user_id, this.props.user.user.user.user_id)
+                if(this.state.user_id === this.props.user.user.user.user_id){
+                    this.setState({
+                        notYou: false
+                    })
+                }
+            })
+        } else {
+            this.refresh()
+        }
     }
+    //this function will make an axios call and get your logged in information stored on the reducer state
     refresh = () => {
         axios.get('/api/games/mine').then(res=>{
             console.log(res.data)
@@ -26,6 +48,7 @@ class Profile extends Component {
                 user_id: this.props.user.user.user.user_id
             })
         })
+        axios.get('/api/')
 
     }
     handleEmail = (value) => {
@@ -34,9 +57,10 @@ class Profile extends Component {
     handlePicture = (value) => {
         this.setState({user_picture: value})
     }
+    //this will push your update changes to the database 
     sendChanges = () => {
         const {user_id, email, user_picture} = this.state
-        console.log(user_id)
+        // console.log(user_id)
         axios.put(`/auth/email/${user_id}`, {email, user_picture}).then(res => {
             console.log(res.data)
             this.setState({
@@ -52,10 +76,17 @@ class Profile extends Component {
     select = (game_id) => {
         this.props.history.push(`/dashboard/${game_id}`)
     }
+    messageUser = () => {
+        const {user_id} = this.props.user.user.user
+        let id = this.state.user_id
+        const {email} = this.state
+        this.props.history.push(`/chat/${id}/${user_id}/${email}`)
+    }
     render(){
         // console.log(this.props.user.user.loggedIn)
         // console.log(this.state)
-        const {games, email, user_picture, editing} = this.state
+        // console.log(this.props)
+        const {games, email, user_picture, editing, notYou} = this.state
         let mappedGames = games.map((el)=> {
             return(
                 <div className='smallGame' onClick={()=> this.select(el.game_id)}>
@@ -81,12 +112,20 @@ class Profile extends Component {
                             <div>
                                 <img className='profile-picture' src={user_picture}/>
                                 <h2>Hello: {email}</h2>
-                                <button onClick={this.edit}>Edit Profile</button>
+                                {notYou ? (
+                                    <button onClick={this.messageUser}>Message</button>
+                                ) : (
+                                    <button onClick={this.edit}>Edit Profile</button>
+                                )}
                             </div>
                         )}
                     </div>
                     <div className='gameHolder' id='style-2'>
-                        My games
+                    {notYou ? (
+                        <div>{email} games</div>           
+                    ) : (
+                        <div>My Games</div>          
+                    )}
                         {mappedGames}
                     </div>
                 </div>

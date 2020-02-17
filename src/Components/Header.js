@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import '../App.css'
-import {Link} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
 import {register, login, logout, email} from '../ducks/userReducer'
 import {connect} from 'react-redux'
 import './Dashboard.css'
@@ -29,7 +29,8 @@ const Header = props => {
             ):(
             <div className='login'>
                 <h1>Hello {props.user.user.user.email}</h1>
-                <button onClick={()=>props.logout()}>Logout</button>
+                <button className='search-button' onClick={()=>props.logout().then(()=> {
+                    props.history.push('/dashboard')})}>Logout</button>
             </div>
             )}
         </div>
@@ -38,4 +39,4 @@ const Header = props => {
 function mapStateToProps(state){
     return{user: state}
 }
-export default connect(mapStateToProps, {register, login, logout, email})(Header)
+export default withRouter(connect(mapStateToProps, {register, login, logout, email})(Header))

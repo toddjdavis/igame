@@ -1,0 +1,70 @@
+.receiver{
+    background-color: rgba(79, 116, 196, 0.562);
+    width: 30vh;
+    height: auto;
+    position: relative;
+    right: 0;
+    
+    /* padding-left: 10px; */
+}
+.sender{
+    background-color: rgba(153, 79, 196, 0.562);
+    width: 30vh;
+    height: auto;
+    left: 0;
+}
+.chat{
+    position: relative;
+    left: 25vw;
+    top: .5vh;
+    width: 50vw;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(75, 46, 46, 0.144);
+    border-radius: 20px;
+}
+.messages{
+  height:  80vh;
+  width: 50vw;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+#style-2::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+    background-color: #F5F5F5;
+    height: 80%;
+}
+#style-2::-webkit-scrollbar
+{
+    width: 12px;
+	background-color: #F5F5F5;
+}
+
+#style-2::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: rgba(41, 102, 214, 0.356);
+}
+.message-area{
+    height: 10vh;
+    width: 50vw;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.message-button{
+    background-color: rgba(34, 34, 116, 0.26);
+    height: 2.5vh;
+    width: 5vw;
+    border-color: transparent;
+}
+.message-input{
+    height: 9vh;
+    width: 40vw;
+}
