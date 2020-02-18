@@ -185,7 +185,7 @@ class Dashboard extends Component {
             let rate = +el.avg
             // console.log(rate)
             return(
-                <div>
+                <div className='rating'>
                     <h1>Rating: {Math.round(rate *100)/100} /5</h1>
                 </div>
             )
@@ -229,7 +229,7 @@ class Dashboard extends Component {
                             <option value={4}>4</option>
                             <option value={5}>5</option>
                         </select>
-                        <button onClick={this.rateAGame}>Rate Game</button>
+                        <button className='rate-button' onClick={this.rateAGame}>Rate Game</button>
                         <div className='together'>
                             <div>like this game?</div>
                             <input onChange={this.likeGame} type='checkbox'/>

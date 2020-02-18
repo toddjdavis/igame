@@ -22,6 +22,7 @@ module.exports = {
         let info = await db.game.get_rating(+id)
         res.status(200).send(info)
     },
+    //this function will get all the comments for one game and send it to the front end
     getComments: async (req, res) => {
         const db = req.app.get('db')
         const {id} = req.params
@@ -40,7 +41,7 @@ module.exports = {
     //if a user is looking for just one game this will alow the user to search for that game
     searchGame: async (req, res) => {
         const db = req.app.get('db')
-        // console.log(req.body)
+        console.log(req.body)
         const {search} = req.body
         let searched = await db.game.search_games(search)
         // console.log(searched)
@@ -97,6 +98,8 @@ module.exports = {
         db.game.update_game(title, description, game_picture, id,user_id)
         res.sendStatus(200)
     },
+    
+    //haven't made functional on the front end yet
     // this will update a posted comment and will return all the comments from the selected game
     updateComment: async (req, res) => {
         const db = req.app.get('db')
@@ -117,17 +120,12 @@ module.exports = {
         db.game.delete_game(id, user_id)
         res.sendStatus(200)
     },
+    //haven't made functional on the front end yet
     deleteComment: (req, res) => {
         const db = req.app.get('db')
         const {user_id} = req.session.user
         const {id} = req.params
         db.game.delete_comment(id, user_id)
         res.sendStatus(200)
-   },
-   unlike: (req, res) => {
-    const db = req.app.get('db')
-    const {id} = req.params
-    const {user_id} = req.session.user
-    db.game.unlike_game(user_id, id)
-   }
+    }
 }

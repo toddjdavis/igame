@@ -7,6 +7,7 @@ class Profile extends Component {
         super()
         this.state ={  
             games: [],
+            chats: [],
             email: '',
             user_picture: '',
             user_id: null,
@@ -39,16 +40,20 @@ class Profile extends Component {
     }
     //this function will make an axios call and get your logged in information stored on the reducer state
     refresh = () => {
+        const {user_id, email, user_picture} = this.props.user.user.user
         axios.get('/api/games/mine').then(res=>{
-            console.log(res.data)
+            // console.log(res.data)
             this.setState({
                 games: res.data,
-                email: this.props.user.user.user.email,
-                user_picture: this.props.user.user.user.user_picture,
-                user_id: this.props.user.user.user.user_id
+                email: email,
+                user_picture: user_picture,
+                user_id: user_id
             })
-        })
-        axios.get('/api/')
+        }).catch(err=>console.log(err))
+        axios.get(`/api/chats/${user_id}`).then(res => {
+            console.log(res.data)
+            this.setState({chats: res.data})
+        }).catch(err=>console.log(err))
 
     }
     handleEmail = (value) => {
@@ -73,9 +78,11 @@ class Profile extends Component {
     edit = () => {
         this.setState({editing:true})
     }
+    //this will push users back to the dashboard with the game they selected to see
     select = (game_id) => {
         this.props.history.push(`/dashboard/${game_id}`)
     }
+    //this function will pull the user information and create a new chatroom allowing users to talk to each other
     messageUser = () => {
         const {user_id} = this.props.user.user.user
         let id = this.state.user_id
@@ -86,12 +93,25 @@ class Profile extends Component {
         // console.log(this.props.user.user.loggedIn)
         // console.log(this.state)
         // console.log(this.props)
-        const {games, email, user_picture, editing, notYou} = this.state
+        const {games, email, user_picture, editing, notYou, chats} = this.state
         let mappedGames = games.map((el)=> {
             return(
                 <div className='smallGame' onClick={()=> this.select(el.game_id)}>
                     <img className='smallPicture' alt={el.title} src={el.game_picture}/>
                     <h2>{el.title}</h2>
+                </div>
+            )
+        })
+        let mappedChats = chats.map((el)=> {
+            let pic = 'https://cdn2.iconfinder.com/data/icons/bubbles-phone-interface/100/avatar_blank_human_face_contact_user_app-512.png'
+            return(
+                <div className='comment'>
+                    {el.user_picture ? (
+                        <img className='comment-picture' src={el.user_picture} />
+                    ) : (
+                        <img className='comment-picture' src={pic} />
+                    )}
+                    <h4>{el.email}</h4>
                 </div>
             )
         })
@@ -106,17 +126,21 @@ class Profile extends Component {
                             <div>
                                 <input placeholder='Profile Picture URL' value={user_picture} onChange={(e)=> this.handlePicture(e.target.value)} />
                                 <input placeholder='Email' value={email} onChange={(e)=> this.handleEmail(e.target.value)} />
-                                <button onClick={this.sendChanges}>Submit changes</button>
+                                <button className='search-button' onClick={this.sendChanges}>Submit changes</button>
                             </div>
                         ) : (
                             <div>
                                 <img className='profile-picture' src={user_picture}/>
                                 <h2>Hello: {email}</h2>
                                 {notYou ? (
-                                    <button onClick={this.messageUser}>Message</button>
+                                    <button className='search-button' onClick={this.messageUser}>Message</button>
                                 ) : (
-                                    <button onClick={this.edit}>Edit Profile</button>
+                                    <button className='search-button' onClick={this.edit}>Edit Profile</button>
                                 )}
+                                <div className='displayComments' id='style-2'>
+                                    Your Chats:
+                                    {mappedChats}
+                                </div>
                             </div>
                         )}
                     </div>

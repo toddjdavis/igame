@@ -2,27 +2,4 @@
   text-align: center;
 }
 
-.tabs{
-  width: 40vw;
-  height: 50px;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  background-color: whitesmoke;
-  color: black;
-  border-radius: 10px;
-}
-.login{
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-.head{
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 100px;
-  width: 100%;
-  color: black;
-  background-color: rgb(143, 177, 197);
-}
+

@@ -54,7 +54,7 @@ app.put('/api/game/update/:id', gameController.updateGame)
 ////delete
 app.delete('/api/game/delete/:id', gameController.deleteGame)
 app.delete('/api/comment/delete/:id', gameController.deleteComment)
-app.delete('/api/game/unlike/:id', gameController.unlike)
+
 
 ////user endpoints
 app.post('/auth/register', userController.register)
@@ -63,4 +63,4 @@ app.get('/auth/logout', userController.logout)
 app.put('/auth/email/:id', userController.updateEmail)
 app.post('/auth/email', userController.email)
 app.get(`/api/user/:id`, userController.getProfile)
-app.get('/api/chats', userController.getMyChats)
+app.get('/api/chats/:id', userController.getMyChats)

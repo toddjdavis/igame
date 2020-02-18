@@ -18,9 +18,11 @@ module.exports = {
         res.status(201).send(req.session.user)
     },
     login: async (req, res) => {
+        console.log(req.body)
         const {email, password} = req.body
-        const db = req. app.get('db')
+        const db = req.app.get('db')
         let user = await db.user.get_user(email)
+        console.log(user)
         if (!user[0]){
             return res.status(400).send('email nt registered')
         }
@@ -98,8 +100,10 @@ module.exports = {
     },
     async getMyChats(req, res){
         const db = req.app.get('db')
-        const {user_id} = req.session.user
-        let myChats = await db.messages.get_my_chats(user_id)
+        // console.log(req.session)
+        const {id} = req.params
+        console.log(id)
+        let myChats = await db.messages.get_my_chats(id)
         res.status(200).send(myChats)
     }
 }

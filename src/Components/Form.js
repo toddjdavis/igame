@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import {update} from '../ducks/gameReducer'
 import './Dashboard.css'
 
 
@@ -30,7 +31,7 @@ class Form extends Component {
             })
         })
     }
-    //i used arrow functions so i would not have to bind them in the com
+    //i used arrow functions so i would not have to bind them in the constructor
     pictureInput = value => {
         this.setState({
             game_picture: value
@@ -74,16 +75,10 @@ class Form extends Component {
         }).catch(err=>console.log(err))
     }
     //after you update the game it will push you back to the dashboard and pull up the game you have updated
-    updateGame = () => {
-        const{game_picture, title, description, game_id} = this.state
-        axios.put(`/api/game/update/${game_id}`, {title, description, game_picture})
-        .then(res=>{
-            this.props.history.push(`/dashboard/${game_id}`)
-        }).catch(err=>console.log(err))
-    }
+    
     render(){
         // console.log(this.props.user.user.loggedIn)
-        const{game_picture, title, description, update} = this.state
+        const{game_id, game_picture, title, description, update} = this.state
         console.log(description)
         console.log(this.props)
         return(
@@ -96,7 +91,7 @@ class Form extends Component {
                     {!update ? (
                         <button className='form-button' onClick={this.addGame}>Post Game</button>
                     ):(
-                        <button className='form-button' onClick={this.updateGame}>Update Game</button>
+                        <button className='form-button' onClick={()=> this.props.update(game_id, title, description, game_picture).then(()=> this.props.history.push(`/dashboard/${game_id}`))}>Update Game</button>
                     )}
                 </div>
             </div>
@@ -107,4 +102,4 @@ class Form extends Component {
 function mapStateToProps(state){
     return{user: state}
 }
-export default withRouter(connect(mapStateToProps)(Form))
+export default withRouter(connect(mapStateToProps, {update})(Form))

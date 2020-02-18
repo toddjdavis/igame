@@ -1,6 +1,6 @@
 module.exports ={
     async messageToServer(body, io, socket, db){
-        console.log(body)
+        // console.log(body)
         const {chatroom_id, user_id, message, email} = body;
         let newMessage = await db.messages.create_message(chatroom_id, +user_id, message, email)
         // console.log(newMessage)
@@ -13,10 +13,10 @@ module.exports ={
     },
     async checkForChatroom(body, io, socket, db){
         const {user_id, user_id2} = body
-        console.log({body})
+        // console.log({body})
 
         let [chatroom_id] = await db.messages.check_chat_junc(user_id, user_id2)
-        console.log(chatroom_id)
+        // console.log(chatroom_id)
         if (!chatroom_id){
             let [newChatroomId] = await db.messages.create_chatroom()
             await db.messages.create_chat_junc([+user_id, +newChatroomId.chatroom_id]);

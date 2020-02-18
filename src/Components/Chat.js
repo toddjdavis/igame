@@ -2,13 +2,14 @@ import React, {useEffect, useState} from 'react'
 import io from 'socket.io-client'
 import {withRouter} from 'react-router-dom'
 import './Chat.css'
+import { connect } from 'react-redux'
 
 function Chat(props){
     const [input, handleChange] = useState('')
-    let [messages, updateMessages] = useState([])
-    let [chatroom_id, updateChatroomId] = useState(0)
+    const [messages, updateMessages] = useState([])
+    const [chatroom_id, updateChatroomId] = useState(0)
     const socket = io.connect('http://localhost:4200')
-    console.log(props.match)
+    // console.log(props.match)
     useEffect(()=> {
         if (props.match.params.id){
             socket.emit('join', {
@@ -17,27 +18,35 @@ function Chat(props){
             })
         }
         socket.on('login complete', body => {
-            console.log(body)
-            updateMessages(messages = [...body.chatroomMessages]);
-            updateChatroomId(chatroom_id = body.chatroom_id)
+            // console.log(body)
+            updateMessages([...body.chatroomMessages]);
+            if(body.newChatroomId){
+                updateChatroomId(body.newChatroomId.chatroom_id)
+            } else {
+                updateChatroomId(body.chatroom_id)
+            }
         })
     }, []);
     useEffect(()=> {
         socket.on('incoming', body => {
-            console.log(body)
-            updateMessages([...messages, body[0]])
+            // console.log(body)
+            updateMessages(pMessages => [...pMessages, body[0]])
         })
     }, [])
     function messageToServer(){
-        const {email, sessionUser} = props.match.params
+        // console.log(chatroom_id)
+        const {sessionUser} = props.match.params
+
         socket.emit('message to server', {
             user_id: sessionUser,
             message: input,
             chatroom_id,
-            email
+            email: props.user.user.user.email
         })
         handleChange('')
     }
+    // console.log(messages)
+    // console.log(props.user.user.user)
     return (
         <div className='chat'>
             <div className='messages' id='style-2'>
@@ -58,5 +67,7 @@ function Chat(props){
         </div>
     )
 }
-
-export default withRouter(Chat)
+function mapStateToProps(state){
+    return{user: state}
+}
+export default  withRouter(connect(mapStateToProps)(Chat))

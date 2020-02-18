@@ -19,6 +19,16 @@
     align-items: center;
     
 }
+.singleGame{
+    height: 85vh;
+    width: 50vw;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(12, 123, 214, 0.219);
+    border-radius: 10px;
+}
 .smallGame{
     width: 30vw;
     height: 100px;
@@ -33,19 +43,33 @@
     box-shadow: 4px 4px 4px rgba(53, 6, 6, 0.452);
     
 }
+.tabs{
+    width: 40vw;
+    height: 50px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: whitesmoke;
+    color: black;
+    border-radius: 10px;
+  }
+  .login{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .head{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100px;
+    width: 100%;
+    color: black;
+    background-color: rgb(143, 177, 197);
+  }
 .smallPicture{
     height: 75px;
     width: 75px;
-}
-.singleGame{
-    height: 85vh;
-    width: 50vw;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-    align-items: center;
-    background-color: rgba(12, 123, 214, 0.219);
-    border-radius: 10px;
 }
 .largePicture{
     height: 25vh;
@@ -185,7 +209,7 @@ textarea{
     align-items: center;
     justify-content: flex-start;
     padding-left: 25px;
-    height: 5vh;
+    height: auto;
     border-radius: 10px;
     box-shadow: 2px 2px 2px black;
 }
@@ -249,4 +273,114 @@ textarea{
     width: 4.5vh;
     background-color: rgba(41, 194, 194, 0.404);
     border-radius: 50%;
+}
+.rate-button{
+    background-color: rgba(96, 96, 148, 0.548);
+    position: relative;
+    left: 5px;
+    width: 110px;
+    height: 2.5vh;
+    border-radius:  3px;
+    border-color: transparent;
+}
+
+@media(max-width: 1000px){
+    .dashboard{
+        height: 180vh;
+        width: 99vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    .desc{
+        width: 60vw;
+    }
+    .small-hidden{
+        visibility: hidden;
+    }
+    .head{
+        justify-content: space-evenly;
+        width: 99vw;
+    }
+    #textBody{
+        width: 60vw;
+    }
+    .bar{
+        height: 15vh;
+    }
+    .rating{
+        height: 10vh;
+        position: relative;
+        bottom: 2vh;
+    }
+    .rate-button{
+        height: 5vh;
+    }
+    .displayComments{
+        width: 75vw;
+    }
+    .gameHolder{
+        width: 80vw;
+        position: relative;
+        top: 5vh;
+    }
+    .singleGame{
+        width: 80vw;
+        position: relative;
+        top: 10vh;
+    }
+    .smallGame{
+        width: 65vw;    
+    }
+    .comment{
+        width: 70vw;
+        
+    }
+    .search{
+        width: 20vw;
+        height: 3vh;
+    }
+    .search-button{
+        width: 110px;
+        height: 4vh;
+    }
+    .search-button2{
+        width: 110px;
+        height: 4vh;
+    }
+    
+    .ads1{
+        background-color: transparent;
+        color: transparent;
+    }
+    .ads2{
+        background-color: transparent;
+        color: transparent;
+    }
+    .largePicture{
+        height: 25vh;
+        width: 25vh;
+       position: relative;
+       left: 12%;
+    }
+    .profile-page{
+        height: 180vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    .profile{
+        width: 80vw;
+        position: relative;
+        top: 2.5vh;
+    }
+    .tabs{
+        width: auto;
+        /* position: relative;
+        left: 5vw; */
+    }
+    .user-buttons{
+        display: flex;
+        flex-direction: column;
+    }
 }
