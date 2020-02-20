@@ -35,12 +35,17 @@
     display: flex;
     justify-content: start;
     align-items: center;
-    background-color: rgba(35, 61, 77, 0.281);
+    /* background-color: rgba(35, 61, 77, 0.281); */
+    background-color: whitesmoke;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    margin-bottom: 10px;
     padding-left: 25px;
     border-radius: 10px;
     position: relative;
     top: 50px;
-    box-shadow: 4px 4px 4px rgba(53, 6, 6, 0.452);
+    box-shadow: 4px 4px 4px 4px rgba(53, 6, 6, 0.452);
     
 }
 .tabs{
@@ -94,7 +99,7 @@
     top: 25px;
 }
 .displayComments{
-    height: 20vh;
+    height: 26vh;
     width: 48.7vw;
     display: flex;
     justify-content: flex-start;
@@ -103,6 +108,7 @@
     overflow: hidden;
     overflow-y: scroll;
     padding-left: 25px;
+    
 }
 .profile{
     height: 85vh;
@@ -126,12 +132,19 @@
     align-items: center;
 }
 .bar{
-    background-color: rgba(97, 162, 223, 0.404);
+    /* background-color: rgba(97, 162, 223, 0.404); */
     /* background-color: rgba(238, 135, 135, 0.432); */
+    background-color: whitesmoke;
+    border-color: black;
+    /* border-style: solid; */
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-width: 1px;
+    margin-bottom: 0;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    border-radius: 15px;
+    /* border-radius: 15px; */
 }
 .form-button{
     background-color: rgba(28, 81, 124, 0.466);
@@ -191,7 +204,13 @@
     border-radius:  3px;
     border-color: transparent;
 }
-
+.commentArea{
+    /* background-color: rgba(88, 93, 100, 0.322); */
+    height: 32vh;
+    margin-bottom: 0;
+    margin-top: 0;
+    border-radius: 10px;
+}
 textarea{
     width: 25vw;
     height: 5vh;
@@ -204,6 +223,11 @@ textarea{
 .comment{
     background-color: rgba(238, 135, 135, 0.432);
     /* background-color: rgba(97, 162, 223, 0.404); */
+    background-color: whitesmoke;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    margin-top: 2px;
     width: 46vw;
     display: flex;
     align-items: center;
@@ -214,8 +238,12 @@ textarea{
     box-shadow: 2px 2px 2px black;
 }
 .desc{
-    background-color: rgba(238, 135, 135, 0.432);
+    /* background-color: rgba(238, 135, 135, 0.432); */
     /* background-color: rgba(97, 162, 223, 0.404); */
+    background-color: whitesmoke;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
     height: 15vh;
     width: auto;
     padding-left: 15px;
@@ -225,7 +253,11 @@ textarea{
 
 .title{
     /* background-color: rgba(97, 162, 223, 0.404); */
-    background-color: rgba(238, 135, 135, 0.432);
+    /* background-color: rgba(238, 135, 135, 0.432); */
+    background-color: whitesmoke;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
     width: auto;
     height: 5vh;
     border-radius: 3vh;
@@ -283,14 +315,80 @@ textarea{
     border-radius:  3px;
     border-color: transparent;
 }
+.large-hidden{
+    visibility: hidden;
+}
+.rating-hidden{
+    position: relative;
+    top: 2.8vh;
+}
+.chats{
+    background-color: rgba(179, 36, 11, 0.589);
+    background-color: whitesmoke;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 5px;
+    border-radius: 15px;
+    padding-left: 10px;
+    width: 38vw;
+}
+.display-chats{
+    overflow: hidden;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 45vh;
+    width: 39.5vw;
+    margin-left: 0.5vw;
+}
+.dropdown{
+    background-color: rgba(70, 171, 202, 0.432);
+    border-radius: 20px;
+    height: 30px;
+    width: 110px;
+    border-style: hidden;
+    display: flex;
+    justify-content: center;
+}
+.liked{
+    height: 20px;
+    width: 20px;
+}
 
 @media(max-width: 1000px){
+    .hello-world{
+        height: 4vh;
+        position: relative;
+        bottom: 65%;
+    }
+    .chats{
+        width: 7vw;
+    }
+    .display-chats{
+        width: 79vw;
+        height: 40vh;
+    }
+    .rating-hidden{
+        visibility: hidden;
+    }
     .dashboard{
         height: 180vh;
         width: 99vw;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
+    }
+    .large-hidden{
+        visibility: visible;
+        position: relative;
+        bottom: 11vh;
     }
     .desc{
         width: 60vw;
@@ -306,7 +404,7 @@ textarea{
         width: 60vw;
     }
     .bar{
-        height: 15vh;
+        height: 10vh;
     }
     .rating{
         height: 10vh;

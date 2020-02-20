@@ -3,6 +3,7 @@ import '../App.css'
 import {Link, withRouter} from 'react-router-dom'
 import {register, login, logout, email} from '../ducks/userReducer'
 import {connect} from 'react-redux'
+import Swal from 'sweetalert2'
 import './Dashboard.css'
 
 const Header = props => {
@@ -10,6 +11,13 @@ const Header = props => {
     const [inputs, handleInputs] = useState({email: '', password: ''})
     // console.log(inputs.email, inputs.password)
     // console.log(props.user)
+    const errorToUser = (errorMessage) => { 
+        Swal.fire({
+        title: 'error!',
+        text: errorMessage,
+        icon: 'error',
+        confirmButtonText: 'Ok!'
+    })}
     return(
         <div className='head'>
             <div className='tabs'>
@@ -30,8 +38,8 @@ const Header = props => {
                 <input className='search' placeholder='Email' onChange={(e) => handleInputs({...inputs, email: e.target.value})}/>
                 <input className='search' placeholder='Password' type='password' onChange={(e) => handleInputs({...inputs, password: e.target.value})}/>
                 <div className='user-buttons'>
-                    <button className='search-button' onClick={()=>props.login(inputs.email, inputs.password).then(()=> handleInputs({...inputs, password: '', email: ''}))}>Login</button>
-                    <button className='search-button2' onClick={()=>props.register(inputs.email, inputs.password).then(()=> {props.email(inputs.email)}).then(()=> handleInputs({...inputs, password: '', email: ''}))} >Register</button>
+                    <button className='search-button' onClick={()=>props.login(inputs.email, inputs.password).then(()=> handleInputs({...inputs, password: '', email: ''})).catch(err=>{errorToUser('Incorrect username or password')})}>Login</button>
+                    <button className='search-button2' onClick={()=>props.register(inputs.email, inputs.password).then(()=> {props.email(inputs.email)}).then(()=> handleInputs({...inputs, password: '', email: ''})).catch(err=>errorToUser('Email is already taken'))} >Register</button>
                 </div>
             </div>
             ):(

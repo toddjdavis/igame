@@ -27,10 +27,14 @@ function Chat(props){
             }
         })
     }, []);
+
     useEffect(()=> {
         socket.on('incoming', body => {
             // console.log(body)
             updateMessages(pMessages => [...pMessages, body[0]])
+        })
+        socket.on('delete message', messages => {
+            updateMessages(messages)
         })
     }, [])
     function messageToServer(){
@@ -45,6 +49,12 @@ function Chat(props){
         })
         handleChange('')
     }
+    function deleteMessage(id){
+        socket.emit('delete message', {
+            message_id: id,
+            chatroom_id,
+        })
+    }
     // console.log(messages)
     // console.log(props.user.user.user)
     return (
@@ -57,6 +67,7 @@ function Chat(props){
                     : 'receiver'}>
                         <h4>{msg.email}</h4>
                        <span>{msg.message}</span> 
+                       <button onClick={()=> deleteMessage(msg.message_id)}>Delete Message</button>
                     </div>
                 ))}
             </div>

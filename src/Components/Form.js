@@ -3,6 +3,7 @@ import axios from 'axios'
 import {connect} from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import {update} from '../ducks/gameReducer'
+import Swal from 'sweetalert2'
 import './Dashboard.css'
 
 
@@ -47,26 +48,28 @@ class Form extends Component {
             description: value
         })
     }
+    errorToUser = (errorMessage) => { 
+        Swal.fire({
+        title: 'error!',
+        text: errorMessage,
+        icon: 'error',
+        confirmButtonText: 'Ok!'
+    })}
     //this will check two conditions before letting someone post a new game first if you ate signed in adn second if you have entered a game fields
     addGame = () => {
-        if(!this.props.user.user.loggedIn){
-            return(
-                alert('Please sign In')
-        )
-    }
         if(!this.state.title){
             return(
-                alert('Please enter a title')
+                this.errorToUser('Please enter a title')
                 )
             }
             if(!this.state.game_picture){
             return(
-                alert('Please enter a Picture URL')
+                this.errorToUser('Please enter a Picture URL')
                 )
         }
         if(!this.state.description){
             return(
-                alert('Please enter a description')
+                this.errorToUser3('Please enter a description')
                 )
         }
         const{game_picture, title, description} = this.state

@@ -89,6 +89,11 @@ class Profile extends Component {
         const {email} = this.state
         this.props.history.push(`/chat/${id}/${user_id}/${email}`)
     }
+    //this will let you use the mappedChat array to let you message users you already have active messages with
+    messageUserAgain = (id, email) => {
+        const {user_id} = this.props.user.user.user
+        this.props.history.push(`/chat/${id}/${user_id}/${email}`)
+    }
     render(){
         // console.log(this.props.user.user.loggedIn)
         // console.log(this.state)
@@ -105,7 +110,7 @@ class Profile extends Component {
         let mappedChats = chats.map((el)=> {
             let pic = 'https://cdn2.iconfinder.com/data/icons/bubbles-phone-interface/100/avatar_blank_human_face_contact_user_app-512.png'
             return(
-                <div className='comment'>
+                <div className='chats' onClick={()=> this.messageUserAgain(el.user_id, el.email)}>
                     {el.user_picture ? (
                         <img className='comment-picture' src={el.user_picture} />
                     ) : (
@@ -137,10 +142,14 @@ class Profile extends Component {
                                 ) : (
                                     <button className='search-button' onClick={this.edit}>Edit Profile</button>
                                 )}
-                                <div className='displayComments' id='style-2'>
-                                    Your Chats:
-                                    {mappedChats}
-                                </div>
+                                {notYou ? (
+                                    <div></div>
+                                ):(
+                                    <div id='style-2' className='display-chats'>
+                                        Your Chats:
+                                        {mappedChats}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>

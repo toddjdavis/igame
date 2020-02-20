@@ -26,6 +26,7 @@ massive(CONNECTION_STRING).then(db => {
         const db = app.get('db')
         socket.on('message to server', body=> messageController.messageToServer(body, io, socket, db, session))
         socket.on('join', body=> messageController.checkForChatroom(body, io, socket, db, session))
+        socket.on('delete message', body=> messageController.deleteMessage(body, io, socket, db, session))
     });
 })
 

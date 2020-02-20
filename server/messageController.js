@@ -6,6 +6,13 @@ module.exports ={
         // console.log(newMessage)
         io.in(chatroom_id).emit('incoming', newMessage)
     },
+    async deleteMessage(body, io, socket, db){
+        // console.log(body)
+        const {message_id, chatroom_id} = body
+        let deletedMessages = await db.messages.delete_message(message_id, chatroom_id)
+        console.log(deletedMessages)
+        io.in(chatroom_id).emit('delete message', deletedMessages)
+    },
     async joinRoom(body, io, socket, db){
         const {chatroom_id, chatroomMessages} = body;
         socket.join(chatroom_id);

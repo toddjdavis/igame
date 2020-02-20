@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer')
 const {EMAIL, PASSWORD} = process.env
 module.exports = {
     register: async (req, res) =>{
-        console.log(req.body)
+        // console.log(req.body)
         const {email, password, user_picture} = req.body
         const db = req.app.get('db')
         let userCheck = await db.user.get_user(email)
@@ -18,11 +18,11 @@ module.exports = {
         res.status(201).send(req.session.user)
     },
     login: async (req, res) => {
-        console.log(req.body)
+        // console.log(req.body)
         const {email, password} = req.body
         const db = req.app.get('db')
         let user = await db.user.get_user(email)
-        console.log(user)
+        // console.log(user)
         if (!user[0]){
             return res.status(400).send('email nt registered')
         }
