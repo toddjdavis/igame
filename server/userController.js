@@ -1,7 +1,7 @@
 require('dotenv').config()
 const bcrypt = require('bcryptjs')
 const nodemailer = require('nodemailer')
-const {EMAIL, PASSWORD} = process.env
+const {EMAIL, PASSWORD, ADMIN_PASSWORD} = process.env
 module.exports = {
     register: async (req, res) =>{
         // console.log(req.body)
@@ -14,8 +14,22 @@ module.exports = {
         let salt = bcrypt.genSaltSync(10)
         let hash = bcrypt.hashSync(password, salt)
         let newUser = await db.user.register(email, hash, user_picture)
-        req.session.user = {user_id: newUser[0].user_id, email: newUser[0].email, user_picture: newUser[0].user_picture}
+        req.session.user = newUser[0]
         res.status(201).send(req.session.user)
+    },
+    updatePassword: async (req, res) => {
+        const db = req.app.get('db')
+        console.log(req.body)
+        const {oldPassword, newPassword} = req.body
+        const {id} = req.params
+        let authenticated = bcrypt.compareSync(oldPassword, req.session.user.password)
+        if(!authenticated){
+            res.status(401).send('password incorrect')
+        }
+        let salt = bcrypt.genSaltSync(10)
+        let hash = bcrypt.hashSync(newPassword, salt)
+        await db.user.update_password(hash, id)
+        res.sendStatus(200)
     },
     login: async (req, res) => {
         // console.log(req.body)
@@ -30,8 +44,7 @@ module.exports = {
         if(!authenticated){
             res.status(401).send('password incorrect')
         }
-        req.session.user = {user_id: user[0].user_id, email: user[0].email,
-        user_picture: user[0].user_picture}
+        req.session.user = user[0]
         res.status(202).send(req.session.user)
     },
     logout: (req, res) => {
@@ -105,5 +118,15 @@ module.exports = {
         console.log(id)
         let myChats = await db.messages.get_my_chats(id)
         res.status(200).send(myChats)
+    },
+    async updateAdmin(req,res){
+        const db = req.app.get('db')
+        const {password, user_id} = req.body
+        console.log(ADMIN_PASSWORD)
+        if(password !== ADMIN_PASSWORD){
+            return res.status(401).send('password incorrect')
+        }
+        let admin = await db.user.become_admin(user_id)
+        res.status(200).send(admin)
     }
 }

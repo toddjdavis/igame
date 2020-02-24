@@ -6,6 +6,8 @@ const {SESSION_SECRET, CONNECTION_STRING, SERVER_PORT} = process.env
 const gameController = require('./gameController')
 const userController = require('./userController')
 const messageController = require('./messageController')
+const purchaseController = require('./purchaseController')
+const stripeController = require('./stripeController')
 const app = express()
 
 app.use(express.json())
@@ -15,19 +17,23 @@ app.use(session({
     secret: SESSION_SECRET,
     cookie: {maxAge: 3600000}
 }))
+// console.log('hello woreld');
+
 
 massive(CONNECTION_STRING).then(db => {
     app.set('db', db)
     console.log('db is ready to game')
     const io = require('socket.io')(
         app.listen(SERVER_PORT, ()=> console.log(`server is listening on port: ${SERVER_PORT}`))
-    );
-    io.on('connection', socket => {
-        const db = app.get('db')
-        socket.on('message to server', body=> messageController.messageToServer(body, io, socket, db, session))
-        socket.on('join', body=> messageController.checkForChatroom(body, io, socket, db, session))
-        socket.on('delete message', body=> messageController.deleteMessage(body, io, socket, db, session))
-    });
+            );
+        io.on('connection', socket => {
+            // console.log('connection');
+            
+            const db = app.get('db')
+            socket.on('message to server', body=> messageController.messageToServer(body, io, socket, db, session))
+            socket.on('join', body=> messageController.checkForChatroom(body, io, socket, db, session))
+            socket.on('delete message', body=> messageController.deleteMessage(body, io, socket, db, session))
+        });
 })
 
 //////game endpoints 
@@ -62,6 +68,18 @@ app.post('/auth/register', userController.register)
 app.post('/auth/login', userController.login)
 app.get('/auth/logout', userController.logout)
 app.put('/auth/email/:id', userController.updateEmail)
+app.put('/auth/password/:id', userController.updatePassword)
 app.post('/auth/email', userController.email)
 app.get(`/api/user/:id`, userController.getProfile)
 app.get('/api/chats/:id', userController.getMyChats)
+app.post('/auth/admin', userController.updateAdmin)
+
+//purchaseController endpoints
+app.post('/api/buygame/post', purchaseController.postBuyGame)
+app.post('/api/buygame/buy', purchaseController.buyGame)
+app.post('/api/available', purchaseController.makeAvailable)
+app.get('/api/buygame/:id', purchaseController.getBuyGame)
+app.put('/api/bg/u/:id', purchaseController.updateBuyGame)
+
+//stripe
+app.post('/api/payment', stripeController.makePayment)

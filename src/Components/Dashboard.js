@@ -17,8 +17,9 @@ class Dashboard extends Component {
             commentText: '',
             search: '',
             email: '',
-            userRating: null,
             liked: false,
+            available: false,
+            userRating: null,
             game_id: null,
             user_id: null
         }
@@ -44,6 +45,7 @@ class Dashboard extends Component {
                 description: res.data[0].description,
                 user_id: res.data[0].user_id,
                 email: res.data[0].email,
+                available: res.data[0].available,
                 userRating: null
             })
             axios.get(`/api/games/comment/${value}`).then(res1=> {
@@ -109,6 +111,14 @@ class Dashboard extends Component {
             })
         })
     }
+    //this function will allow admins to delete games off the dashboard
+    adminDelete = (id) => {
+        axios.delete(`/api/game/delete/${id}`).then(res => {
+            console.log(res.data)
+            this.setState({games: res.data})
+            this.props.history.push('/dashboard')
+        }).catch(err=>console.log(err))
+    }
     //this will allow you to click on a email and go to there profile page and view the games they have liked as well as message them
     viewProfile=(value)=> {
         console.log(value)
@@ -118,7 +128,26 @@ class Dashboard extends Component {
             return(this.errorToUser('please login to view a users profile'))
         }
     }
-    
+    buyGame = () => {
+        if(!this.props.user.user.loggedIn){
+            return(this.errorToUser('please login to buy a game'))
+        }
+        const {game_id} = this.state
+        this.props.history.push(`/checkout/${game_id}`)
+    }
+    adminBuyGame = () => {
+        const {game_id} = this.state
+        this.props.history.push(`/admin/edit/${game_id}`)
+    }
+    //things function will allow ypu to message the admin to get a game available
+    messageAdmin=()=> {
+        const {user_id} = this.props.user.user.user
+        if(!this.props.user.user.loggedIn){
+            return(this.errorToUser('please login to message admin'))
+        }else{
+            this.props.history.push(`/chat/1/${user_id}/todd@test.com`)
+        }
+    }
     //this allows users to rate and game and will return the new avg of how the game has been rated
     rateAGame = () => {
         if(!this.props.user.user.loggedIn){
@@ -152,7 +181,7 @@ class Dashboard extends Component {
         confirmButtonText: 'Ok!'
     })}
     render(){
-        const {game_picture, user_id, title, description, games, game_id, comments, userRating, rating, email} = this.state
+        const {game_picture, user_id, title, description, games, game_id, comments, userRating, rating, email, available} = this.state
         // console.log(this.state.commentText)
         // console.log(this.props.user)
         // console.log(games)
@@ -164,8 +193,15 @@ class Dashboard extends Component {
         let mappedGames = games.map((el)=> {
             return(
                 <div className='smallGame' onClick={()=> this.select(el.game_id)}>
-                    <img className='smallPicture' alt={el.title} src={el.game_picture}/>
-                    <h2>{el.title}</h2>
+                    <div className='in-game'>
+                        <img className='smallPicture' alt={el.title} src={el.game_picture}/>
+                        <h2>{el.title}</h2>
+                    </div>
+                    {this.props.user.user.user.admin ? (
+                        <button onClick={()=>this.adminDelete(el.game_id)} className='search-button'>Delete Game</button>
+                    ):(
+                        <div></div>
+                    )}
                 </div>
             )
         })
@@ -210,6 +246,24 @@ class Dashboard extends Component {
                 ):(
                 <div className='singleGame' >
                     <div className='ads-space'>
+                        {this.props.user.user.user.admin ? (
+                            <div>
+                                {available ?(
+                                    <button onClick={this.adminBuyGame} className='search-button'>Update {title}</button>
+                                ):(
+                                    <button onClick={this.adminBuyGame} className='search-button'>Post {title}</button>
+                                )}
+                            </div>
+                        ):(
+                            <div>
+                                {available?(
+                                    <button className='search-button' onClick={this.buyGame}>Buy {title}</button>
+                                ):(
+                                    <button className='search-button' onClick={this.messageAdmin}>Message Admin about {title}</button>
+                                )}
+                            </div>
+                        )}
+                        
                         <div className='ads1'>
                             <h2>Ads for {title}</h2>
                         </div>

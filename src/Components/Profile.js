@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import './Dashboard.css'
+import Swal from 'sweetalert2'
+
 class Profile extends Component {
     constructor(){
         super()
@@ -10,8 +12,14 @@ class Profile extends Component {
             chats: [],
             email: '',
             user_picture: '',
+            password: '',
+            oldPassword: '',
+            newPassword: '',
+            newPassword2: '',
             user_id: null,
             editing: false,
+            editPassword: false,
+            admin: false,
             notYou: false
         }
     }
@@ -24,6 +32,7 @@ class Profile extends Component {
                     email: res.data[0].email,
                     user_picture: res.data[0].user_picture,
                     user_id: res.data[0].user_id,
+                    admin: res.data[0].admin,
                     games: res.data,
                     notYou: true
                 })
@@ -40,18 +49,19 @@ class Profile extends Component {
     }
     //this function will make an axios call and get your logged in information stored on the reducer state
     refresh = () => {
-        const {user_id, email, user_picture} = this.props.user.user.user
+        const {user_id, email, user_picture, admin} = this.props.user.user.user
         axios.get('/api/games/mine').then(res=>{
             // console.log(res.data)
             this.setState({
                 games: res.data,
                 email: email,
                 user_picture: user_picture,
-                user_id: user_id
+                user_id: user_id,
+                admin: admin
             })
         }).catch(err=>console.log(err))
         axios.get(`/api/chats/${user_id}`).then(res => {
-            console.log(res.data)
+            // console.log(res.data)
             this.setState({chats: res.data})
         }).catch(err=>console.log(err))
 
@@ -61,6 +71,18 @@ class Profile extends Component {
     }
     handlePicture = (value) => {
         this.setState({user_picture: value})
+    }
+    handlePassword = (value) => {
+        this.setState({password: value})
+    }
+    handleOldPassword = (value) => {
+        this.setState({oldPassword: value})
+    }
+    handleNewPassword = (value) => {
+        this.setState({newPassword: value})
+    }
+    handleNewPassword2 = (value) => {
+        this.setState({newPassword2: value})
     }
     //this will push your update changes to the database 
     sendChanges = () => {
@@ -94,11 +116,39 @@ class Profile extends Component {
         const {user_id} = this.props.user.user.user
         this.props.history.push(`/chat/${id}/${user_id}/${email}`)
     }
+    //this will allow an admin to type in a password and let them save another user as an admin
+    becomeAdmin = () => {
+        const {password, user_id} = this.state
+        axios.post('/auth/admin', {password, user_id}).then(() => {
+            this.setState({admin:true})
+        }).catch(err=> this.errorToUser('wrong password'))
+    }
+    passwordToggle = () => {
+        this.setState({editPassword: !this.state.editPassword})
+    }
+    errorToUser = (errorMessage) => { 
+        Swal.fire({
+        title: 'error!',
+        text: errorMessage,
+        icon: 'error',
+        confirmButtonText: 'Ok!'
+    })}
+    changePassword = () => {
+        const {oldPassword, newPassword, newPassword2, user_id} = this.state
+        if(newPassword !== newPassword2){
+            return(this.errorToUser('Passwords do not match'))
+        }
+        let id = user_id
+        axios.put(`/auth/password/${id}`, {newPassword, oldPassword}).then(()=> {
+            this.passwordToggle()
+        }).catch(err=>this.errorToUser('Password incorrect'))
+    }
     render(){
         // console.log(this.props.user.user.loggedIn)
         // console.log(this.state)
         // console.log(this.props)
-        const {games, email, user_picture, editing, notYou, chats} = this.state
+        console.log(this.state.admin)
+        const {games, email, user_picture, editing, notYou, chats, admin, editPassword} = this.state
         let mappedGames = games.map((el)=> {
             return(
                 <div className='smallGame' onClick={()=> this.select(el.game_id)}>
@@ -132,15 +182,40 @@ class Profile extends Component {
                                 <input placeholder='Profile Picture URL' value={user_picture} onChange={(e)=> this.handlePicture(e.target.value)} />
                                 <input placeholder='Email' value={email} onChange={(e)=> this.handleEmail(e.target.value)} />
                                 <button className='search-button' onClick={this.sendChanges}>Submit changes</button>
+                                
                             </div>
                         ) : (
                             <div>
                                 <img className='profile-picture' src={user_picture}/>
                                 <h2>Hello: {email}</h2>
                                 {notYou ? (
-                                    <button className='search-button' onClick={this.messageUser}>Message</button>
+                                    <div>
+                                        <button className='search-button' onClick={this.messageUser}>Message</button>
+                                        {this.props.user.user.user.admin ? (
+                                            <div>
+                                                <button onClick={this.becomeAdmin}>Set Admin</button>
+                                                <input type='password' passwordInput={(e)=>this.handlePassword(e.target.value)} />
+                                            </div>
+                                        ):(
+                                            <div></div>
+                                        )}
+
+                                    </div>
                                 ) : (
-                                    <button className='search-button' onClick={this.edit}>Edit Profile</button>
+                                    <div>
+                                        <button className='search-button' onClick={this.edit}>Edit Profile</button>
+                                        {editPassword ? (
+                                            <div>
+                                                <input type='password' className='search' onChange={(e)=> this.handleOldPassword(e.target.value)} placeholder='Old Password'/>
+                                                <input type='password' className='search' onChange={(e)=> this.handleNewPassword(e.target.value)} placeholder='New Password'/>
+                                                <input type='password' className='search' onChange={(e)=> this.handleNewPassword2(e.target.value)} placeholder='Confirm Password'/>
+                                                <button className='search-button' onClick={this.changePassword}>Change password?</button>
+                                                <button className='search-button' onClick={this.passwordToggle}>Cancel</button>
+                                            </div>
+                                        ):(
+                                        <button className='search-button' onClick={this.passwordToggle}>Change password?</button>
+                                        )}
+                                    </div>
                                 )}
                                 {notYou ? (
                                     <div></div>

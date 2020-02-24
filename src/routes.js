@@ -4,6 +4,8 @@ import Dashboard from './Components/Dashboard'
 import Form from './Components/Form'
 import Profile from './Components/Profile'
 import Chat from './Components/Chat'
+import Checkout from './Components/Checkout'
+import CheckoutEdit from './Components/CheckoutEdit'
 
 export default (
     <Switch>
@@ -12,6 +14,8 @@ export default (
         <Route path='/dashboard/:id' component={Dashboard} />
         <Route path='/profile/:id' component={Profile} />
         <Route path='/chat/:id/:sessionUser/:email' component={Chat}/>
+        <Route path='/checkout/:id' component={Checkout}/>
+        <Route path='/admin/edit/:id' component={CheckoutEdit}/>
         {/* these three can be accessed in the header */}
         <Route path='/dashboard' component={Dashboard} />
         <Route path='/add' component={Form} />

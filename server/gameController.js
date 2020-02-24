@@ -113,12 +113,12 @@ module.exports = {
     //delete endpoints
     //this is where users can delete there comments and games they have posted
     //this will remove a game a user has posted
-    deleteGame: (req, res) => {
+    deleteGame: async (req, res) => {
         const db = req.app.get('db')
         const {user_id} = req.session.user
         const {id} = req.params
-        db.game.delete_game(id, user_id)
-        res.sendStatus(200)
+        let deletedArray = await db.game.delete_game(id, user_id)
+        res.status(200).send(deletedArray)
     },
     //haven't made functional on the front end yet
     deleteComment: (req, res) => {

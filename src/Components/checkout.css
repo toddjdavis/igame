@@ -1,0 +1,23 @@
+.checkout-holder{
+    background-color: rgb(3, 243, 3);
+    height: 500px;
+    width: 600px;
+}
+.checkout-button{
+    background-color: darkcyan;
+    height: 35px;
+    width: 100px;
+    border-color: transparent;
+    border-radius: 5px;
+    background-color: turquoise;
+}
+.checkout-actions{
+    background-color: darkgray;
+}
+.checkout-image{
+    height: 200px;
+    
+}
+.checkout-info{
+    background-color: lightcoral;
+}

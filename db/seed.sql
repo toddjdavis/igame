@@ -2,14 +2,16 @@ create table users(
     user_id serial primary key,
     email varchar(250),
     password varchar(250),
-    user_picture varchar(250)
-);
+    user_picture varchar(250),
+    admin boolean
+)
 create table games(
     game_id serial primary key,
     user_id int references users(user_id),
     title varchar(150),
     description varchar(1000),
-    game_picture varchar(250)
+    game_picture varchar(250),
+    available boolean
 );
 create table liked(
     liked_id serial primary key,
@@ -27,4 +29,4 @@ create table comments(
     user_id int references users(user_id),
     game_id int references games(game_id),
     comment varchar(500)
-)
+);
