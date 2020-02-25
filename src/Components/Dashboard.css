@@ -367,7 +367,22 @@ textarea{
     justify-content: flex-start;
     align-items: center;
 }
+.buy-button{
+    height: 48px;
+    width: 150px;
+    border-radius: 25px;
+    border-style: solid;
+    border-width: 1px;
+    background-color: whitesmoke;
+    border-color: black;
+    position: relative;
+    top: 45px;
+    left: 200px;
+}
 @media(max-width: 875px){
+    textarea{
+        width: 400px;
+    }
     .hello-world{
         height: 4vh;
         position: relative;
@@ -412,9 +427,10 @@ textarea{
         height: 10vh;
     }
     .rating{
-        height: 10vh;
+        /* border-style: dotted; */
+        height: 50px;
         position: relative;
-        bottom: 2vh;
+        bottom: 30px;
     }
     .rate-button{
         height: 5vh;
@@ -465,6 +481,7 @@ textarea{
         width: 25vh;
        position: relative;
        left: 12%;
+       top: 15px;
     }
     .profile-page{
         height: 180vh;
@@ -479,11 +496,24 @@ textarea{
     }
     .tabs{
         width: auto;
-        /* position: relative;
-        left: 5vw; */
     }
     .user-buttons{
         display: flex;
         flex-direction: column;
+    }
+    .chats{
+        width: 500px;
+    }
+    .profile-buttons{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .profile-password-buttons{
+        display: flex;
+        justify-content: center;
+    }
+    .profile-inputs{
+        margin-left: 8px;
     }
 }

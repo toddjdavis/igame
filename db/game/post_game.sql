@@ -3,7 +3,7 @@ insert into games(
     title,
     description,
     game_picture,
-    availble
+    available
 ) values (
     $1,
     $2,

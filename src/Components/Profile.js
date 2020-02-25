@@ -133,6 +133,14 @@ class Profile extends Component {
         icon: 'error',
         confirmButtonText: 'Ok!'
     })}
+    successToUser = () => {
+        Swal.fire({
+            title: 'Success',
+            text: 'Password has been updated',
+            icon: 'success',
+            confirmButtonText: 'OK!'
+        })
+    }
     changePassword = () => {
         const {oldPassword, newPassword, newPassword2, user_id} = this.state
         if(newPassword !== newPassword2){
@@ -141,6 +149,7 @@ class Profile extends Component {
         let id = user_id
         axios.put(`/auth/password/${id}`, {newPassword, oldPassword}).then(()=> {
             this.passwordToggle()
+            this.successToUser()
         }).catch(err=>this.errorToUser('Password incorrect'))
     }
     render(){
@@ -202,15 +211,19 @@ class Profile extends Component {
 
                                     </div>
                                 ) : (
-                                    <div>
+                                    <div className='profile-buttons'>
                                         <button className='search-button' onClick={this.edit}>Edit Profile</button>
                                         {editPassword ? (
                                             <div>
-                                                <input type='password' className='search' onChange={(e)=> this.handleOldPassword(e.target.value)} placeholder='Old Password'/>
-                                                <input type='password' className='search' onChange={(e)=> this.handleNewPassword(e.target.value)} placeholder='New Password'/>
-                                                <input type='password' className='search' onChange={(e)=> this.handleNewPassword2(e.target.value)} placeholder='Confirm Password'/>
-                                                <button className='search-button' onClick={this.changePassword}>Change password?</button>
-                                                <button className='search-button' onClick={this.passwordToggle}>Cancel</button>
+                                                <div className='profile-inputs'>
+                                                    <input type='password' className='search' onChange={(e)=> this.handleOldPassword(e.target.value)} placeholder='Old Password'/>
+                                                    <input type='password' className='search' onChange={(e)=> this.handleNewPassword(e.target.value)} placeholder='New Password'/>
+                                                    <input type='password' className='search' onChange={(e)=> this.handleNewPassword2(e.target.value)} placeholder='Confirm Password'/>
+                                                </div>
+                                                <div className='profile-password-buttons'>
+                                                    <button className='search-button' onClick={this.changePassword}>Change password?</button>
+                                                    <button className='search-button' onClick={this.passwordToggle}>Cancel</button>
+                                                </div>
                                             </div>
                                         ):(
                                         <button className='search-button' onClick={this.passwordToggle}>Change password?</button>

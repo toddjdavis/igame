@@ -243,37 +243,33 @@ class Dashboard extends Component {
                 {/* this will either ask you to select a game to view or show you the game you have selected and display the relevant data */}
                 {!game_id ?(
                         <h1 >Please Select a game to view</h1>
-                ):(
-                <div className='singleGame' >
+                        ):(
+                            <div className='singleGame' >
                     <div className='ads-space'>
+                        <img className='largePicture' src={game_picture} alt={title} />
+                    </div>
+                    <div className='side'>
+
                         {this.props.user.user.user.admin ? (
                             <div>
                                 {available ?(
-                                    <button onClick={this.adminBuyGame} className='search-button'>Update {title}</button>
-                                ):(
-                                    <button onClick={this.adminBuyGame} className='search-button'>Post {title}</button>
-                                )}
+                                    <button onClick={this.adminBuyGame} className='buy-button'>Update {title}</button>
+                                    ):(
+                                    <button onClick={this.adminBuyGame} className='buy-button'>Post {title}</button>
+                                    )}
                             </div>
                         ):(
                             <div>
                                 {available?(
-                                    <button className='search-button' onClick={this.buyGame}>Buy {title}</button>
-                                ):(
-                                    <button className='search-button' onClick={this.messageAdmin}>Message Admin about {title}</button>
-                                )}
+                                    <button className='buy-button' onClick={this.buyGame}>Buy {title}</button>
+                                    ):(
+                                        <button className='buy-button' onClick={this.messageAdmin}>Message Admin about {title}</button>
+                                        )}
                             </div>
                         )}
-                        
-                        <div className='ads1'>
-                            <h2>Ads for {title}</h2>
+                        <div className='title'>
+                            <h1>{title}</h1>
                         </div>
-                        <img className='largePicture' src={game_picture} alt={title} />
-                        <div className='ads2'>
-                            <h2>Ads for games similar to {title}</h2>
-                        </div>
-                    </div>
-                    <div className='title'>
-                        <h1>{title}</h1>
                     </div>
                     <div className='desc'>
                         <span id='textBody'>{description}</span>

@@ -1,23 +1,48 @@
 .checkout-holder{
-    background-color: rgb(3, 243, 3);
+    background-color: #8FB1C5;
     height: 500px;
     width: 600px;
+    position: relative;
+    top: 20vh;
+    left: 25vw;
+    border-radius: 25px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 .checkout-button{
-    background-color: darkcyan;
+    /* background-color: darkcyan; */
     height: 35px;
-    width: 100px;
+    width: 120px;
     border-color: transparent;
     border-radius: 5px;
-    background-color: turquoise;
+    background-color: rgb(94, 156, 207);
+    box-shadow: .5px .5px .5px .5px black;
+    color: white;
+    font-weight: bold;
 }
 .checkout-actions{
-    background-color: darkgray;
-}
-.checkout-image{
-    height: 200px;
+    width: 125px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    top: 100px;
+    right: 54px;
     
 }
+.checkout-image{
+    height: 250px;
+    width: 250px;
+    margin-left: 20px;
+}
 .checkout-info{
-    background-color: lightcoral;
+    background-color: whitesmoke;
+    position: relative;
+    width: 200px;
+    left: 110px;
+    bottom: 100px;
+    border-radius: 10px;
 }

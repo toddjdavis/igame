@@ -51,7 +51,9 @@ module.exports = {
     //when a user is logged in they can post a game and and the front end will route them back to the main dashboard which will have a componentDidMount() and will fire the getAllGames request
     addGame: async (req, res) => {
         const db = req.app.get('db')
+        console.log(req.session)
         const {user_id} = req.session.user
+        console.log(req.body)
         const {title, description, game_picture} = req.body
         await db.game.post_game(user_id, title, description, game_picture)
         res.sendStatus(200)
@@ -115,9 +117,8 @@ module.exports = {
     //this will remove a game a user has posted
     deleteGame: async (req, res) => {
         const db = req.app.get('db')
-        const {user_id} = req.session.user
         const {id} = req.params
-        let deletedArray = await db.game.delete_game(id, user_id)
+        let deletedArray = await db.game.delete_game(id)
         res.status(200).send(deletedArray)
     },
     //haven't made functional on the front end yet
